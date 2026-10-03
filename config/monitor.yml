@@ -22,6 +22,7 @@ settings:
 ui_checks:
   - name: The Internet — login
     url: https://the-internet.herokuapp.com
+    warn_ms: 45000        # site de treino em hospedagem gratuita: lento por natureza, limite próprio
     steps:
       - visit: /login
       - fill: { field: "#username", with: tomsmith }
