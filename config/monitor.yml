@@ -1,0 +1,52 @@
+# Configuração do monitor. Para adicionar uma checagem nova, basta incluir um item aqui.
+# Todos os sites abaixo são ambientes PÚBLICOS feitos para treino de automação.
+# As credenciais são as de demonstração divulgadas pelos próprios sites.
+
+settings:
+  ui_warn_ms: 8000        # fluxo de tela acima disso = amarelo
+  api_warn_ms: 2000       # API acima disso = amarelo
+  ui_wait_seconds: 15
+
+  # Classificação do log de erros
+  min_occurrences: 20     # abaixo disso, a ocorrência não é tratada como crítica
+  bug_classes:            # exceções que indicam bug no código (não falha externa)
+    - NoMethodError
+    - TypeError
+    - ArgumentError
+    - NameError
+    - ZeroDivisionError
+    - RuntimeError
+  ignored_operations:     # operações que usam exceção genérica para sinalizar regra de negócio
+    - ValidarRegraDeNegocio
+
+ui_checks:
+  - name: The Internet — login
+    url: https://the-internet.herokuapp.com
+    steps:
+      - visit: /login
+      - fill: { field: "#username", with: tomsmith }
+      - fill: { field: "#password", with: "SuperSecretPassword!" }
+      - click: button[type="submit"]
+      - expect_text: You logged into a secure area!
+
+  - name: Sauce Demo — login e catálogo
+    url: https://www.saucedemo.com
+    steps:
+      - visit: /
+      - fill: { field: "#user-name", with: standard_user }
+      - fill: { field: "#password", with: secret_sauce }
+      - click: "#login-button"
+      - expect_css: .inventory_list
+
+api_checks:
+  - name: ServeRest — listar usuários
+    url: https://serverest.dev/usuarios
+    expect_status: 200
+
+  - name: Restful Booker — ping
+    url: https://restful-booker.herokuapp.com/ping
+    expect_status: 201
+
+  - name: JSONPlaceholder — consultar post
+    url: https://jsonplaceholder.typicode.com/posts/1
+    expect_status: 200

@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Uso: ruby bin/monitor
+# Variáveis opcionais: SLACK_WEBHOOK_URL, DRY_RUN=true, DEMO_FAILURE=true, EVENTS_FILE=caminho.json, STRICT=true
+require_relative '../lib/health_monitor'
+
+overall = HealthMonitor::Runner.new.call
+
+# STRICT=true faz o processo terminar com erro quando o status é vermelho (útil para travar um pipeline).
+exit(1) if ENV['STRICT'] == 'true' && overall == :fail
